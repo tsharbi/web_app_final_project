@@ -8,19 +8,31 @@ const App = () => {
     const [dbPopulated, setDbPopulated] = useState(false);
     const [populateMessage, setPopulateMessage] = useState('');
 
-    useEffect(() => {
-        fetch('./recipes.json')
-            .then(response => response.json())
-            .then(data => setRecipes(data));
-    }, []);
 
-    const populateDB = () => {
-        console.log('Populating database with recipes...', recipes);
+    const populateDB = async () => {
 
-        setTimeout(() => {
-            setDbPopulated(true);
-            setPopulateMessage('782 recipe(s) successfully added to the database');
-        }, 1000);
+        console.log('Populating database with recipes...');
+
+//        try {
+            const response = await fetch('http://localhost:5001/api/recipes/populate', {
+
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'signal': 'start' })
+            });
+
+//            if (response.ok) {
+//                const data = await response.json();
+//                setDbPopulated(true);
+//                setPopulateMessage(data.message);
+//            } else {
+//                throw new Error('Failed to populate database');
+//            }
+//        } catch (error) {
+//            console.error('Error populating database:', error);
+//        }
     };
 
     return (
@@ -28,12 +40,16 @@ const App = () => {
             <header className="app-header">
                 <div className="top">
                     {!dbPopulated && (
+                    <>
                         <button className="navbutton" onClick={populateDB}>Populate DB</button>
+                        {console.log('just clicked button')}
+                    </>
                     )}
 
                     {dbPopulated && (
                         <div className="populate-message">{populateMessage}</div>
                     )}
+
                 </div>
                 <div>
                     <img src={logo} alt="logo"/>
@@ -57,3 +73,4 @@ const App = () => {
 };
 
 export default App;
+
