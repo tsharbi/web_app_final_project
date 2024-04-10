@@ -7,6 +7,7 @@ const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [dbPopulated, setDbPopulated] = useState(false);
     const [populateMessage, setPopulateMessage] = useState('');
+    const signal = "start";
 
 
     const populateDB = async () => {
@@ -20,7 +21,8 @@ const App = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ 'signal': 'start' })
+                body: JSON.stringify({ signal })
+
             });
 
 //            if (response.ok) {

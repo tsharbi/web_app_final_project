@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -34,7 +36,10 @@ app.post('/api/recipes/populate', async (req, res) => {
 
     console.log('reached');
     const jsonFile = path.join('..', 'public', 'recipes.json');
+
     const { signal } = req.body;
+    console.log('Received signal:', signal);
+    console.log('reached 2');
 
     if (signal === 'start') {
         console.log('permision to start adding is granted');
