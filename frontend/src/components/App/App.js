@@ -9,13 +9,6 @@ const App = () => {
     const [populateMessage, setPopulateMessage] = useState('');
     const signal = "start";
 
-
-    useEffect(() => {
-            fetch('./recipes.json')
-                .then(response => response.json())
-                .then(data => setRecipes(data));
-    }, []);
-
     const populateDB = async () => {
 
         // send post request to backend to start adding recipes

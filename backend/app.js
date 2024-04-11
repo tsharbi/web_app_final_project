@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -19,7 +17,7 @@ app.use(cors(corsOptions));
 const port = process.env.PORT || 5001;
 
 
-// Connect to MongoDB
+// Connect to mongoDB
 mongoose.connect('mongodb://localhost:27017/recipe_db')
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.error('Error connecting to MongoDB:', err));
@@ -37,19 +35,22 @@ app.post('/api/recipes/populate', async (req, res) => {
     // if command start is passed through then we start adding
     if (signal === 'start') {
         let recipesAdded = 0;
-        console.log('permision to start adding is granted');
+        console.log('permission to start adding is granted');
 
         // parse the json file
         const data = fs.readFileSync(jsonFile);
         const recipes = JSON.parse(data);
 
+        const recipesToProcess = 782;
+
         // loop through all recipes and create recipes using recipe model
-        for (const singleRecipe of recipes) {
+        for (let i = 0; i < recipesToProcess && i < recipes.length; i++) {
+                const singleRecipe = recipes[i];
                 try {
                     const recipe = new Recipe(singleRecipe);
                     recipe.save();
-
                     recipesAdded++;
+
                 } catch (err) {
                     console.error('Error creating recipe:', err);
                 }
