@@ -10,34 +10,37 @@ const App = () => {
     const signal = "start";
 
 
+    useEffect(() => {
+            fetch('./recipes.json')
+                .then(response => response.json())
+                .then(data => setRecipes(data));
+    }, []);
+
     const populateDB = async () => {
 
-        console.log('Populating database with recipes...');
+        // send post request to backend to start adding recipes
+        const response = await fetch('http://localhost:5001/api/recipes/populate', {
 
-//        try {
-            const response = await fetch('http://localhost:5001/api/recipes/populate', {
+              method: 'POST',
+              headers: {
+                   'Content-Type': 'application/json'
+              },
+                    body: JSON.stringify({ signal })
 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ signal })
+        });
 
-            });
+        // receives the number of recipes added and prints
+        if (response.ok) {
+              const data = await response.json();
+              setDbPopulated(true);
+              setPopulateMessage(data.message);
+        }
 
-//            if (response.ok) {
-//                const data = await response.json();
-//                setDbPopulated(true);
-//                setPopulateMessage(data.message);
-//            } else {
-//                throw new Error('Failed to populate database');
-//            }
-//        } catch (error) {
-//            console.error('Error populating database:', error);
-//        }
+
     };
 
     return (
+        // Syntax of the buttons
         <div className="app">
             <header className="app-header">
                 <div className="top">

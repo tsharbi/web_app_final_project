@@ -6,7 +6,7 @@ let recipeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
+  image: String,
   description: String,
   recipeYield: String,
   cookTime: String,

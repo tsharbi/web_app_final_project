@@ -27,49 +27,38 @@ mongoose.connect('mongodb://localhost:27017/recipe_db')
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.use(express.json());
 
-app.get('/hello', (req, res) => {
-    console.log('hello');
-});
-
-console.log('just got here');
+// receives the post request from the frontend
 app.post('/api/recipes/populate', async (req, res) => {
 
-    console.log('reached');
-    const jsonFile = path.join('..', 'public', 'recipes.json');
+    const jsonFile = path.join(__dirname, 'recipes.json');
 
     const { signal } = req.body;
-    console.log('Received signal:', signal);
-    console.log('reached 2');
 
+    // if command start is passed through then we start adding
     if (signal === 'start') {
+        let recipesAdded = 0;
         console.log('permision to start adding is granted');
+
+        // parse the json file
+        const data = fs.readFileSync(jsonFile);
+        const recipes = JSON.parse(data);
+
+        // loop through all recipes and create recipes using recipe model
+        for (const singleRecipe of recipes) {
+                try {
+                    const recipe = new Recipe(singleRecipe);
+                    recipe.save();
+
+                    recipesAdded++;
+                } catch (err) {
+                    console.error('Error creating recipe:', err);
+                }
+        }
+
+        // sends the response of total recipes added back to the frontend
+        res.status(200).json({ message: `${recipesAdded} recipes successfully added to the database` });
+
     }
-
-
-
-//    if (signal === 'start'){
-//        const data = fs.readFileSync(jsonFile);
-//        const recipes = JSON.parse(data);
-//
-//        let recipesAdded = 0;
-//
-//        // Iterate through each recipe and add them to the database
-//        for (const singleRecipe of recipes) {
-//            try {
-//                const recipe = new Recipe(singleRecipe);
-//                await recipe.save();
-//                recipesAdded++;
-//            } catch (err) {
-//                console.error('Error creating recipe:', err);
-//            }
-//        }
-//
-//        // Send response with the number of recipes successfully added
-//        res.status(200).json({ message: `${recipesAdded} recipes successfully added to the database` });
-//    } else {
-//        console.error('Error reading or parsing recipes JSON file:');
-//        res.status(500).json({ error: 'Error reading or parsing recipes JSON file' });
-//    }
 });
 
 // Catch-all route handler for serving the frontend index.html file
