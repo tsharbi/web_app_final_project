@@ -7,6 +7,7 @@ const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [dbPopulated, setDbPopulated] = useState(false);
     const [populateMessage, setPopulateMessage] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const signal = "start";
 
     const populateDB = async () => {
@@ -28,9 +29,23 @@ const App = () => {
               setDbPopulated(true);
               setPopulateMessage(data.message);
         }
-
-
     };
+
+    const handleInputChange = (event) => {
+            setSearchValue(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+            event.preventDefault();
+            console.log('Entered value:', searchValue);
+    };
+
+    const handleKeyPress = (event) => {
+            if (event.key === 'Enter') {
+                handleSubmit(event);
+            }
+    };
+
 
     return (
         // Syntax of the buttons
@@ -40,7 +55,7 @@ const App = () => {
                     {!dbPopulated && (
                     <>
                         <button className="navbutton" onClick={populateDB}>Populate DB</button>
-                        {console.log('just clicked button')}
+
                     </>
                     )}
 
@@ -53,12 +68,20 @@ const App = () => {
                     <img src={logo} alt="logo"/>
                 </div>
             </header>
-
             <main className="show-result">
-                <form>
-                    <input type="text" name="search" placeholder="Find Recipe"/>
-                </form>
-            </main>
+                            <form onSubmit={handleSubmit}>
+                                <input
+                                    type="text"
+                                    name="search"
+                                    placeholder="Find Recipe"
+                                    value={searchValue}
+                                    onChange={handleInputChange}
+                                    onKeyPress={handleKeyPress}
+                                />
+                            </form>
+                        </main>
+
+
             <main className="show-result">
                 <div className="recipe-cards-container">
                     {recipes.map((recipe, index) => (
