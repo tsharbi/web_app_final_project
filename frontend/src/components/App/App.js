@@ -35,10 +35,15 @@ const App = () => {
             setSearchValue(event.target.value);
     };
 
-    const handleSubmit = (event) => {
-            event.preventDefault();
-            console.log('Entered value:', searchValue);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        console.log('Entered value:', searchValue);
+
+
+        const response = await fetch(`http://localhost:5001/api/search?searchValue=${encodeURIComponent(searchValue)}`);
+
     };
+
 
     const handleKeyPress = (event) => {
             if (event.key === 'Enter') {

@@ -62,6 +62,14 @@ app.post('/api/recipes/populate', async (req, res) => {
     }
 });
 
+app.get('/api/search', (req, res) => {
+    const searchValue = req.query.searchValue;
+
+
+    console.log('Received search value:', searchValue);
+
+});
+
 // Catch-all route handler for serving the frontend index.html file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../backend/public', 'index.html'));
