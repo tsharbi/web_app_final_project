@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import "./App.css";
 import logo from './recipe-finder.png';
 import RecipeCard from '../RecipeCard/RecipeCard';
+import Search from '../Search/Search';
+
 
 const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [dbPopulated, setDbPopulated] = useState(false);
     const [populateMessage, setPopulateMessage] = useState('');
-    const [searchValue, setSearchValue] = useState('');
+    //const [searchValue, setSearchValue] = useState('');
     const signal = "start";
 
     const populateDB = async () => {
@@ -31,26 +33,10 @@ const App = () => {
         }
     };
 
-    const handleInputChange = (event) => {
-            setSearchValue(event.target.value);
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        console.log('Entered value:', searchValue);
-
-
+    const handleSearch = async (searchValue) => {
         const response = await fetch(`http://localhost:5001/api/search?searchValue=${encodeURIComponent(searchValue)}`);
 
     };
-
-
-    const handleKeyPress = (event) => {
-            if (event.key === 'Enter') {
-                handleSubmit(event);
-            }
-    };
-
 
     return (
         // Syntax of the buttons
@@ -73,18 +59,11 @@ const App = () => {
                     <img src={logo} alt="logo"/>
                 </div>
             </header>
+
             <main className="show-result">
-                            <form onSubmit={handleSubmit}>
-                                <input
-                                    type="text"
-                                    name="search"
-                                    placeholder="Find Recipe"
-                                    value={searchValue}
-                                    onChange={handleInputChange}
-                                    onKeyPress={handleKeyPress}
-                                />
-                            </form>
-                        </main>
+                   <Search onSearch={handleSearch} />
+
+            </main>
 
 
             <main className="show-result">
