@@ -3,7 +3,7 @@ import "./App.css";
 import logo from './recipe-finder.png';
 import RecipeCard from '../RecipeCard/RecipeCard';
 import Search from '../Search/Search';
-
+import SearchResults from '../SearchResults/SearchResults';
 
 const App = () => {
     const [recipes, setRecipes] = useState([]);
@@ -34,8 +34,21 @@ const App = () => {
     };
 
     const handleSearch = async (searchValue) => {
-        const response = await fetch(`http://localhost:5001/api/search?searchValue=${encodeURIComponent(searchValue)}`);
-
+        try {
+            // Receives the search value from the user from the backend
+            const response = await fetch(`http://localhost:5001/api/search?searchValue=${searchValue}`);
+            if (response.ok) {
+                // If response is ok, then it reads the json
+                const recipe = await response.json();
+                setRecipes(recipe); // Update the recipes state with the search results
+            } else {
+                // If failed, it gives error
+                console.error('Failed to fetch search results in database:', response.statusText);
+            }
+        } catch (error) {
+            // Prints error
+            console.error('Error searching recipes in database:', error);
+        }
     };
 
     return (
@@ -64,15 +77,8 @@ const App = () => {
                    <Search onSearch={handleSearch} />
 
             </main>
-
-
-            <main className="show-result">
-                <div className="recipe-cards-container">
-                    {recipes.map((recipe, index) => (
-                        <RecipeCard key={index} recipe={recipe} />
-                    ))}
-                </div>
-            </main>
+            {/*Displays cards on screen*/}
+            <SearchResults searchResults={recipes} />
         </div>
     );
 };

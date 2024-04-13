@@ -62,12 +62,27 @@ app.post('/api/recipes/populate', async (req, res) => {
     }
 });
 
-app.get('/api/search', (req, res) => {
+app.get('/api/search', async (req, res) => {
     const searchValue = req.query.searchValue;
+    // Searches for recipes with searchValue in database
+    try {
+        // Goes through title, ingredients, and description to find value with no case sensitivity
+        const recipeResults = await Recipe.find({
+            $or: [
+                { title: { $regex: searchValue, $options: 'i' } },
+                { ingredients: { $regex: searchValue, $options: 'i' } },
+                { description: { $regex: searchValue, $options: 'i' } }
+            ]
+        });
 
-
-    console.log('Received search value:', searchValue);
-
+        // Prints recipe results
+        console.log('Recipe results:', recipeResults);
+        res.status(200).json(recipeResults);
+    // Throws error
+    } catch (error) {
+        console.error('Error for searching recipes in database:', error);
+        res.status(500).json({ error: 'An error occurred while searching recipes in database' });
+    }
 });
 
 // Catch-all route handler for serving the frontend index.html file
