@@ -5,6 +5,7 @@ import '../RecipeCard/RecipeCard.css';
 
 const SearchResults = ({ searchResults, onAddToFavorites }) => {
     return (
+        // Prints search results on recipe cards
         <div className="recipe-cards-container">
             {searchResults.map((recipe, index) => (
                 <RecipeCard

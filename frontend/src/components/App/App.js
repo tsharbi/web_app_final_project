@@ -49,17 +49,21 @@ const App = () => {
         }
     };
 
+    // Adds a recipe to favorites
     const handleAddToFavorites = (recipe) => {
         setFavorites([...favorites, recipe]);
     };
 
+    // Removes a recipe from favorites
     const handleRemoveFromFavorites = (recipe) => {
         const updatedFavorites = favorites.filter((fav) => fav.name !== recipe.name);
         setFavorites(updatedFavorites);
     };
 
     return (
+        // Creates outline for website design
         <div className="app">
+            {/*Creates header*/}
             <header className="app-header">
                 <div className="top">
                     {!dbPopulated && (
@@ -71,7 +75,7 @@ const App = () => {
                     {dbPopulated && (
                         <div className="populate-message">{populateMessage}</div>
                     )}
-
+                    {/*Creates favorite button*/}
                     <button className="navbutton" onClick={() => setShowFavorites(!showFavorites)}>
                         Favorites
                     </button>
@@ -88,14 +92,18 @@ const App = () => {
                         </div>
                     )}
                 </div>
+
+                {/*Displays logo*/}
                 <div>
                     <img src={logo} alt="logo"/>
                 </div>
             </header>
-
+             {/*Search bar*/}
             <main className="show-result">
                 <Search onSearch={handleSearch} />
             </main>
+
+            {/*Shows search results*/}
             <SearchResults
                 searchResults={recipes}
                 onAddToFavorites={handleAddToFavorites}

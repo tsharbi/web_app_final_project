@@ -13,7 +13,7 @@ const RecipeCard = ({ recipe, onAddToFavorites }) => {
         if (!timeStr || timeStr === 'N/A') {
             return 'N/A';
         }
-
+        // Creates format of time
         const hoursMatch = timeStr.match(/(\d+)H/);
         const minutesMatch = timeStr.match(/(\d+)M/);
 
@@ -23,12 +23,14 @@ const RecipeCard = ({ recipe, onAddToFavorites }) => {
         return `${hours}:${minutes}`;
     };
 
+    // Adds recipe to favorites
     const handleAddToFavorites = () => {
         onAddToFavorites(recipe);
     };
 
     return (
-        <article className={`recipe-card ${showDetails ? 'expanded' : ''}`} role="article">
+        // Creates format of recipe card
+        <article className={`recipe-card ${showDetails ? 'expanded' : ''}`}>
             <img
                 src={recipe.image || silhouette_recipe}
                 alt={`Recipe for ${recipe.name}`}
@@ -43,6 +45,7 @@ const RecipeCard = ({ recipe, onAddToFavorites }) => {
                 <p><strong>Cook Time:</strong> {formatTime(recipe.cookTime)}</p>
                 <p><strong>Prep Time:</strong> {formatTime(recipe.prepTime)}</p>
                 <p><strong>Yield:</strong> {recipe.recipeYield}</p>
+                {/*Shows when view recipe is clicked*/}
                 {showDetails && (
                     <>
                         <div className="view-recipe-card">
@@ -59,6 +62,8 @@ const RecipeCard = ({ recipe, onAddToFavorites }) => {
                         </div>
                     </>
                 )}
+
+                {/*View recipe button and add recipe to favorites button*/}
                 <button
                     className="view-recipe"
                     aria-label="View recipe details"

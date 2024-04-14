@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-// schema
+// Creates mongoose scheme for a recipe
 let recipeSchema = new mongoose.Schema({
+  // Includes all of the different aspects of the recipe
   name: {
     type: String,
     required: true
