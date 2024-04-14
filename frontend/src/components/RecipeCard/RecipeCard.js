@@ -3,9 +3,11 @@ import React from 'react';
 import './RecipeCard.css';
 import silhouette_recipe from './silhouette-recipe.jpg';
 import { FaEye } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
-
+import { useState } from 'react';
 const RecipeCard = ({ recipe }) => {
+    const [showDetails, setShowDetails] = useState(false);
     const formatTime = (timeStr) => {
         if (!timeStr || timeStr === 'N/A') {
             return 'N/A';
@@ -21,7 +23,8 @@ const RecipeCard = ({ recipe }) => {
     };
 
     return (
-        <article className="recipe-card" role="article">
+
+        <article className={`recipe-card ${showDetails ? 'expanded' : ''}`} role="article">
             <img
                 src={recipe.image || silhouette_recipe}
                 alt={`Recipe for ${recipe.name}`}
@@ -29,15 +32,32 @@ const RecipeCard = ({ recipe }) => {
                     event.currentTarget.src = silhouette_recipe;
                     event.currentTarget.onError = null;
                 }}
-                style={{ height: '200px', width: '100%' }}
+                style={{ height: 'auto', width: '100%' }}
             />
             <section className="recipe-details">
                 <h3>{recipe.name}</h3>
                 <p><strong>Cook Time:</strong> {formatTime(recipe.cookTime)}</p>
                 <p><strong>Prep Time:</strong> {formatTime(recipe.prepTime)}</p>
                 <p><strong>Yield:</strong> {recipe.recipeYield}</p>
-                <button className="view-recipe" aria-label="View recipe details">
-                    <FaEye /> View Recipe
+                {showDetails && (
+                    <>
+                        <div className="view-recipe-card">
+                            <p><strong>Description:</strong> {recipe.description}</p>
+                            <p className="ingredients"><strong>Ingredients</strong></p>
+                            <ul>
+                                {recipe.ingredients.map((recipeIngredient, index) => (
+                                    <li key={index}>
+                                        {recipeIngredient}
+                                        <button><FaPlus/></button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </>
+                )}
+                <button className="view-recipe" aria-label="View recipe details"
+                        onClick={() => setShowDetails(!showDetails)}>
+                <FaEye /> {showDetails ? "Hide Recipe" : "View Recipe"}
                 </button>
                 <button className="add-to-favorites" aria-label="Add recipe to favorites">
                     <MdFavorite /> Add to Favorites

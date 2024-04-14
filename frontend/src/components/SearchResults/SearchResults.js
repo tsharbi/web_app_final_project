@@ -5,10 +5,12 @@ import '../RecipeCard/RecipeCard.css';
 
 // Define the SearchResults component
 const SearchResults = ({ searchResults }) => {
+    return (
+        // Displays recipes on cards
         <div className="recipe-cards-container">
             {/*Goes through data to display*/}
             {searchResults.map((recipe, index) => (
-                <RecipeCard key={index} recipe={recipe}/>
+                <RecipeCard className="recipe-card" key={index} recipe={recipe}/>
             ))}
         </div>
 };
