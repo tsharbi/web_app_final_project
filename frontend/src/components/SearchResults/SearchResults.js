@@ -11,7 +11,6 @@ const SearchResults = ({ searchResults }) => {
                 <RecipeCard key={index} recipe={recipe}/>
             ))}
         </div>
-    );
 };
 
 // Export the SearchResults component
