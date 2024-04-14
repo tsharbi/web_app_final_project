@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+// src/components/App/App.js
+import React, { useState } from 'react';
 import "./App.css";
 import logo from './recipe-finder.png';
-import RecipeCard from '../RecipeCard/RecipeCard';
 import Search from '../Search/Search';
 import SearchResults from '../SearchResults/SearchResults';
 
@@ -9,27 +9,25 @@ const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [dbPopulated, setDbPopulated] = useState(false);
     const [populateMessage, setPopulateMessage] = useState('');
-    //const [searchValue, setSearchValue] = useState('');
+    const [favorites, setFavorites] = useState([]);
+    const [showFavorites, setShowFavorites] = useState(false);
     const signal = "start";
 
     const populateDB = async () => {
-
         // send post request to backend to start adding recipes
         const response = await fetch('http://localhost:5001/api/recipes/populate', {
-
-              method: 'POST',
-              headers: {
-                   'Content-Type': 'application/json'
-              },
-                    body: JSON.stringify({ signal })
-
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ signal })
         });
 
         // receives the number of recipes added and prints
         if (response.ok) {
-              const data = await response.json();
-              setDbPopulated(true);
-              setPopulateMessage(data.message);
+            const data = await response.json();
+            setDbPopulated(true);
+            setPopulateMessage(data.message);
         }
     };
 
@@ -51,22 +49,44 @@ const App = () => {
         }
     };
 
+    const handleAddToFavorites = (recipe) => {
+        setFavorites([...favorites, recipe]);
+    };
+
+    const handleRemoveFromFavorites = (recipe) => {
+        const updatedFavorites = favorites.filter((fav) => fav.name !== recipe.name);
+        setFavorites(updatedFavorites);
+    };
+
     return (
-        // Syntax of the buttons
         <div className="app">
             <header className="app-header">
                 <div className="top">
                     {!dbPopulated && (
-                    <>
-                        <button className="navbutton" onClick={populateDB}>Populate DB</button>
-
-                    </>
+                        <>
+                            <button className="navbutton" onClick={populateDB}>Populate DB</button>
+                        </>
                     )}
 
                     {dbPopulated && (
                         <div className="populate-message">{populateMessage}</div>
                     )}
 
+                    <button className="navbutton" onClick={() => setShowFavorites(!showFavorites)}>
+                        Favorites
+                    </button>
+                    {showFavorites && (
+                        <div className="favorites-dropdown">
+                            {favorites.map((recipe, index) => (
+                                <div key={index}>
+                                    {recipe.name}
+                                    <button onClick={() => handleRemoveFromFavorites(recipe)}>
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <div>
                     <img src={logo} alt="logo"/>
@@ -74,11 +94,12 @@ const App = () => {
             </header>
 
             <main className="show-result">
-                   <Search onSearch={handleSearch} />
-
+                <Search onSearch={handleSearch} />
             </main>
-            {/*Displays cards on screen*/}
-            <SearchResults searchResults={recipes} />
+            <SearchResults
+                searchResults={recipes}
+                onAddToFavorites={handleAddToFavorites}
+            />
         </div>
     );
 };
