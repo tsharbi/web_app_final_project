@@ -13,6 +13,7 @@ const SearchResults = ({ searchResults }) => {
                 <RecipeCard className="recipe-card" key={index} recipe={recipe}/>
             ))}
         </div>
+        );
 };
 
 // Export the SearchResults component
