@@ -1,9 +1,12 @@
+/* src/components/App/App.css */
 body {
   background-color: #f2f2f2;
 }
 
 .top {
   display: flex;
+  justify-content: right;
+  align-items: center;
   background-color: white;
   box-shadow: rgba(242, 242, 242) 1px 2px 3px;
 }
@@ -14,7 +17,33 @@ body {
   border: none;
   padding: 6px;
   margin: 10px;
-  margin-left: auto;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.favorites-dropdown {
+  position: absolute;
+  top: 37%;
+  right: 0;
+  background-color: #d4d4d4;
+  box-shadow: rgba(242, 242, 242) 1px 2px 3px;
+  padding: 10px;
+  margin-top: 5px;
+  z-index: 1;
+}
+
+.favorites-dropdown div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.favorites-dropdown button {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  border: none;
+  padding: 4px 8px;
   cursor: pointer;
   font-size: 10px;
 }
@@ -22,7 +51,6 @@ body {
 .populate-message {
   padding: 6px;
   margin: 10px;
-  margin-left: auto;
   font-size: 1vw;
 }
 
@@ -32,6 +60,7 @@ body {
 
 .app-header {
   background-color: white;
+  position: relative;
 }
 
 .app-header img {
