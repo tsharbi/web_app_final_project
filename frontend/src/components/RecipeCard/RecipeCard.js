@@ -1,13 +1,14 @@
 // src/components/RecipeCard.js
-import React from 'react';
+import React, { useState } from 'react';
 import './RecipeCard.css';
 import silhouette_recipe from './silhouette-recipe.jpg';
 import { FaEye } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
-import { useState } from 'react';
-const RecipeCard = ({ recipe }) => {
+
+const RecipeCard = ({ recipe, onAddToFavorites }) => {
     const [showDetails, setShowDetails] = useState(false);
+
     const formatTime = (timeStr) => {
         if (!timeStr || timeStr === 'N/A') {
             return 'N/A';
@@ -22,8 +23,11 @@ const RecipeCard = ({ recipe }) => {
         return `${hours}:${minutes}`;
     };
 
-    return (
+    const handleAddToFavorites = () => {
+        onAddToFavorites(recipe);
+    };
 
+    return (
         <article className={`recipe-card ${showDetails ? 'expanded' : ''}`} role="article">
             <img
                 src={recipe.image || silhouette_recipe}
@@ -55,11 +59,18 @@ const RecipeCard = ({ recipe }) => {
                         </div>
                     </>
                 )}
-                <button className="view-recipe" aria-label="View recipe details"
-                        onClick={() => setShowDetails(!showDetails)}>
-                <FaEye /> {showDetails ? "Hide Recipe" : "View Recipe"}
+                <button
+                    className="view-recipe"
+                    aria-label="View recipe details"
+                    onClick={() => setShowDetails(!showDetails)}
+                >
+                    <FaEye /> {showDetails ? "Hide Recipe" : "View Recipe"}
                 </button>
-                <button className="add-to-favorites" aria-label="Add recipe to favorites">
+                <button
+                    className="add-to-favorites"
+                    aria-label="Add recipe to favorites"
+                    onClick={handleAddToFavorites}
+                >
                     <MdFavorite /> Add to Favorites
                 </button>
             </section>
